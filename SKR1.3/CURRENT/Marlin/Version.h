@@ -28,7 +28,7 @@
 /**
  * Marlin release version identifier
  */
-#define SHORT_BUILD_VERSION "Nathan-Custom"
+#define SHORT_BUILD_VERSION "Nathan-Bilinear"
 
 /**
  * Verbose version identifier which should contain a reference to the location

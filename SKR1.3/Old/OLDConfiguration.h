@@ -71,7 +71,7 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "(Nathan, Albert)" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "(Nathan, 2209 Bilinear)" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
 
 /**
@@ -322,13 +322,12 @@
  * Specify whether the power supply is active HIGH or active LOW.
  */
 //#define PSU_CONTROL
-#define PSU_NAME "Stock PSU"
+//#define PSU_NAME "Stock PSU"
 
 #if ENABLED(PSU_CONTROL)
-  #define PSU_ACTIVE_HIGH false     // Set 'false' for ATX, 'true' for X-Box
+  #define PSU_ACTIVE_HIGH false // Set 'false' for ATX (1), 'true' for X-Box (2)
 
-  //#define PSU_DEFAULT_OFF         // Keep power off until enabled directly with M80
-  //#define PSU_POWERUP_DELAY 100   // (ms) Delay for the PSU to warm up to full power
+  //#define PS_DEFAULT_OFF      // Keep power off until enabled directly with M80
 
   //#define AUTO_POWER_CONTROL  // Enable automatic control of the PS_ON pin
   #if ENABLED(AUTO_POWER_CONTROL)
@@ -353,10 +352,9 @@
  *
  * Temperature sensors available:
  *
- *    -5 : PT100 / PT1000 with MAX31865 (only for sensors 0-1)
- *    -3 : thermocouple with MAX31855 (only for sensors 0-1)
- *    -2 : thermocouple with MAX6675 (only for sensors 0-1)
  *    -4 : thermocouple with AD8495
+ *    -3 : thermocouple with MAX31855 (only for sensor 0)
+ *    -2 : thermocouple with MAX6675 (only for sensor 0)
  *    -1 : thermocouple with AD595
  *     0 : not used
  *     1 : 100k thermistor - best choice for EPCOS 100k (4.7k pullup)
@@ -445,11 +443,11 @@
 // This can protect components from overheating, but NOT from shorts and failures.
 // (Use MINTEMP for thermistor short/failure protection.)
 #define HEATER_0_MAXTEMP 300
-#define HEATER_1_MAXTEMP 275
-#define HEATER_2_MAXTEMP 275
-#define HEATER_3_MAXTEMP 275
-#define HEATER_4_MAXTEMP 275
-#define HEATER_5_MAXTEMP 275
+#define HEATER_1_MAXTEMP 250
+#define HEATER_2_MAXTEMP 250
+#define HEATER_3_MAXTEMP 250
+#define HEATER_4_MAXTEMP 250
+#define HEATER_5_MAXTEMP 250
 #define BED_MAXTEMP      120
 
 //===========================================================================
@@ -474,30 +472,11 @@
                                   // is more than PID_FUNCTIONAL_RANGE then the PID will be shut off and the heater will be set to min/max.
 
   // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
-    // E3D
+  // E3D
   #define DEFAULT_Kp 14.41
   #define DEFAULT_Ki 1.12
   #define DEFAULT_Kd 46.43
 
-  // Creality Ender-3
-  //#define DEFAULT_Kp 21.73
-  //#define DEFAULT_Ki 1.54
-  //#define DEFAULT_Kd 76.55
-
-  // Ultimaker
-  //#define DEFAULT_Kp 22.2
-  //#define DEFAULT_Ki 1.08
-  //#define DEFAULT_Kd 114
-
-  // MakerGear
-  //#define DEFAULT_Kp 7.0
-  //#define DEFAULT_Ki 0.1
-  //#define DEFAULT_Kd 12
-
-  // Mendel Parts V9 on 12V
-  //#define DEFAULT_Kp 63.0
-  //#define DEFAULT_Ki 2.25
-  //#define DEFAULT_Kd 440
 
 #endif // PIDTEMP
 
@@ -534,9 +513,11 @@
   //#define MIN_BED_POWER 0
   //#define PID_BED_DEBUG // Sends debug data to the serial port.
 
+
   #define DEFAULT_bedKp 225.04
   #define DEFAULT_bedKi 39.79
   #define DEFAULT_bedKd 848.56
+
 
   // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
 #endif // PIDTEMPBED
@@ -592,7 +573,7 @@
 //#define COREXY
 //#define COREXZ
 //#define COREYZ
-//#define COREYX
+//#define COREYXf
 //#define COREZX
 //#define COREZY
 
@@ -717,16 +698,16 @@
 /**
  * Default Axis Steps Per Unit (steps/mm)
  * Override with M92
- *                                      X, Y, Z, E0 [, E1[, E2...]]
+ *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4[, E5]]]]]
  */
 #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 102.2 }
 
 /**
  * Default Max Feed Rate (mm/s)
  * Override with M203
- *                                      X, Y, Z, E0 [, E1[, E2...]]
+ *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4[, E5]]]]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 500, 500, 26, 25 }
+#define DEFAULT_MAX_FEEDRATE          { 500, 500, 26, 50 }
 
 #define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
@@ -737,7 +718,7 @@
  * Default Max Acceleration (change/s) change = mm/s
  * (Maximum start speed for accelerated moves)
  * Override with M201
- *                                      X, Y, Z, E0 [, E1[, E2...]]
+ *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4[, E5]]]]]
  */
 #define DEFAULT_MAX_ACCELERATION      { 2500, 2500, 100, 5000 }
 
@@ -857,12 +838,6 @@
 //#define FIX_MOUNTED_PROBE
 
 /**
- * Use the nozzle as the probe, as with a conductive
- * nozzle system or a piezo-electric smart effector.
- */
-//#define NOZZLE_AS_PROBE
-
-/**
  * Z Servo Probe, such as an endstop switch on a rotating arm.
  */
 //#define Z_PROBE_SERVO_NR 0       // Defaults to SERVO 0 connector.
@@ -872,7 +847,6 @@
  * The BLTouch probe uses a Hall effect sensor and emulates a servo.
  */
 #define BLTOUCH
-
 /**
  * Touch-MI Probe by hotends.fr
  *
@@ -930,18 +904,18 @@
  */
 #define NOZZLE_TO_PROBE_OFFSET { -48, -10, -3.4 }
 
-// Most probes should stay away from the edges of the bed, but
-// with NOZZLE_AS_PROBE this can be negative for a wider probing area.
+// Certain types of probes need to stay away from edges
 #define MIN_PROBE_EDGE 20
 
 // X and Y axis travel speed (mm/m) between probes
-#define XY_PROBE_SPEED 8000
+#define XY_PROBE_SPEED 5900
 
 // Feedrate (mm/m) for the first approach when double-probing (MULTIPLE_PROBING == 2)
-#define Z_PROBE_SPEED_FAST HOMING_FEEDRATE_Z
+//#define Z_PROBE_SPEED_FAST HOMING_FEEDRATE_Z
+#define Z_PROBE_SPEED_FAST 180
 
 // Feedrate (mm/m) for the "accurate" probe of each point
-#define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 2)
+#define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 1)
 
 /**
  * Multiple Probing
@@ -952,7 +926,7 @@
  * A total of 2 does fast/slow probes with a weighted average.
  * A total of 3 or more adds more slow probes, taking the average.
  */
-//#define MULTIPLE_PROBING 2
+#define MULTIPLE_PROBING 2
 //#define EXTRA_PROBING    1
 
 /**
@@ -972,7 +946,7 @@
 #define Z_CLEARANCE_DEPLOY_PROBE   8 // Z Clearance for Deploy/Stow
 #define Z_CLEARANCE_BETWEEN_PROBES  3 // Z Clearance between probe points
 #define Z_CLEARANCE_MULTI_PROBE     2 // Z Clearance between multiple probes
-//#define Z_AFTER_PROBING           5 // Z position after probing is done
+//#define Z_AFTER_PROBING           8 // Z position after probing is done
 
 #define Z_PROBE_LOW_POINT          -2 // Farthest distance below the trigger-point to go before stopping
 
@@ -1046,7 +1020,7 @@
 
 //#define NO_MOTION_BEFORE_HOMING  // Inhibit movement until all axes have been homed
 
-#define UNKNOWN_Z_NO_RAISE // Don't raise Z (lower the bed) if Z is "unknown." For beds that fall when Z is powered off.
+//#define UNKNOWN_Z_NO_RAISE // Don't raise Z (lower the bed) if Z is "unknown." For beds that fall when Z is powered off.
 
 #define Z_HOMING_HEIGHT 10  // (mm) Minimal Z height before homing (G28) for Z clearance above the bed, clamps, ...
                              // Be sure you have this distance over your Z_MAX_POS in case.
@@ -1085,7 +1059,7 @@
 #if ENABLED(MIN_SOFTWARE_ENDSTOPS)
   #define MIN_SOFTWARE_ENDSTOP_X
   #define MIN_SOFTWARE_ENDSTOP_Y
-  #define MIN_SOFTWARE_ENDSTOP_Z
+  //#define MIN_SOFTWARE_ENDSTOP_Z
 #endif
 
 // Max software endstops constrain movement within maximum coordinate bounds
@@ -1208,7 +1182,7 @@
   #if ENABLED(G26_MESH_VALIDATION)
     #define MESH_TEST_NOZZLE_SIZE    0.4  // (mm) Diameter of primary nozzle.
     #define MESH_TEST_LAYER_HEIGHT   0.2  // (mm) Default layer height for the G26 Mesh Validation Tool.
-    #define MESH_TEST_HOTEND_TEMP  205    // (°C) Default nozzle temperature for the G26 Mesh Validation Tool.
+    #define MESH_TEST_HOTEND_TEMP  210    // (°C) Default nozzle temperature for the G26 Mesh Validation Tool.
     #define MESH_TEST_BED_TEMP      60    // (°C) Default bed temperature for the G26 Mesh Validation Tool.
     #define G26_XY_FEEDRATE         20    // (mm/s) Feedrate for XY Moves for the G26 Mesh Validation Tool.
   #endif
@@ -1332,7 +1306,8 @@
 
 // Homing speeds (mm/m)
 #define HOMING_FEEDRATE_XY (20*60)
-#define HOMING_FEEDRATE_Z  (20*60)
+//#define HOMING_FEEDRATE_Z  (20*60)
+#define HOMING_FEEDRATE_Z  179
 
 // Validate that endstops are triggered on homing moves
 #define VALIDATE_HOMING_ENDSTOPS
@@ -1447,12 +1422,17 @@
 #define PREHEAT_1_LABEL       "PLA"
 #define PREHEAT_1_TEMP_HOTEND 210
 #define PREHEAT_1_TEMP_BED     60
-#define PREHEAT_1_FAN_SPEED   (2.25*30) // Value from 0 to 255
+#define PREHEAT_1_FAN_SPEED   255 // Value from 0 to 255
 
 #define PREHEAT_2_LABEL       "ABS"
-#define PREHEAT_2_TEMP_HOTEND 240
+#define PREHEAT_2_TEMP_HOTEND  240
 #define PREHEAT_2_TEMP_BED      110
-#define PREHEAT_2_FAN_SPEED   (2.25*30) // Value from 0 to 255
+#define PREHEAT_2_FAN_SPEED   0 // Value from 0 to 255
+
+#define PREHEAT_3_LABEL       "PETG"
+#define PREHEAT_3_TEMP_HOTEND  240
+#define PREHEAT_3_TEMP_BED      75
+#define PREHEAT_3_FAN_SPEED   125 // Value from 0 to 255
 
 /**
  * Nozzle Park
@@ -1471,7 +1451,7 @@
   // Specify a park position as { X, Y, Z_raise }
   #define NOZZLE_PARK_POINT { (X_MIN_POS + 10), (Y_MAX_POS - 10), 200 }
   #define NOZZLE_PARK_XY_FEEDRATE 100   // (mm/s) X and Y axes feedrate (also used for delta Z axis)
-  #define NOZZLE_PARK_Z_FEEDRATE 20      // (mm/s) Z axis feedrate (not used for delta printers)
+  #define NOZZLE_PARK_Z_FEEDRATE 25      // (mm/s) Z axis feedrate (not used for delta printers)
 #endif
 
 /**
@@ -1619,7 +1599,7 @@
  */
 #define LCD_INFO_SCREEN_STYLE 0
 
-/**
+/**+
  * SD CARD
  *
  * SD Card support is disabled by default. If your controller has an SD slot,
@@ -1723,8 +1703,8 @@
 // Note: Test audio output with the G-Code:
 //  M300 S<frequency Hz> P<duration ms>
 //
-//#define LCD_FEEDBACK_FREQUENCY_DURATION_MS 2
-//#define LCD_FEEDBACK_FREQUENCY_HZ 5000
+#define LCD_FEEDBACK_FREQUENCY_DURATION_MS 0
+#define LCD_FEEDBACK_FREQUENCY_HZ 0
 
 //=============================================================================
 //======================== LCD / Controller Selection =========================
@@ -1777,7 +1757,7 @@
 
 //
 // Makeboard 3D Printer Parts 3D Printer Mini Display 1602 Mini Controller
-// https://www.aliexpress.com/item/32765887917.html
+// https://www.aliexpress.com/item/Micromake-Makeboard-3D-Printer-Parts-3D-Printer-Mini-Display-1602-Mini-Controller-Compatible-with-Ramps-1/32765887917.html
 //
 //#define MAKEBOARD_MINI_2_LINE_DISPLAY_1602
 
@@ -1951,17 +1931,12 @@
 
 //
 // Factory display for Creality CR-10
-// https://www.aliexpress.com/item/32833148327.html
+// https://www.aliexpress.com/item/Universal-LCD-12864-3D-Printer-Display-Screen-With-Encoder-For-CR-10-CR-7-Model/32833148327.html
 //
 // This is RAMPS-compatible using a single 10-pin connector.
 // (For CR-10 owners who want to replace the Melzi Creality board but retain the display)
 //
 #define CR10_STOCKDISPLAY
-
-//
-// Ender-2 OEM display, a variant of the MKS_MINI_12864
-//
-//#define ENDER2_STOCKDISPLAY
 
 //
 // ANET and Tronxy Graphical Controller
@@ -1974,7 +1949,7 @@
 
 //
 // AZSMZ 12864 LCD with SD
-// https://www.aliexpress.com/item/32837222770.html
+// https://www.aliexpress.com/store/product/3D-printer-smart-controller-SMART-RAMPS-OR-RAMPS-1-4-LCD-12864-LCD-control-panel-green/2179173_32213636460.html
 //
 //#define AZSMZ_12864
 
@@ -2031,11 +2006,9 @@
 //=============================================================================
 
 //
-// DGUS Touch Display with DWIN OS. (Choose one.)
+// DGUS Touch Display with DWIN OS
 //
-//#define DGUS_LCD_UI_ORIGIN
-//#define DGUS_LCD_UI_FYSETC
-//#define DGUS_LCD_UI_HIPRECY
+//#define DGUS_LCD
 
 //
 // Touch-screen LCD for Malyan M200 printers
@@ -2043,10 +2016,10 @@
 //#define MALYAN_LCD
 
 //
-// Touch UI for FTDI EVE (FT800/FT810) displays
+// LulzBot Color Touch UI for FTDI EVE (FT800/FT810) displays
 // See Configuration_adv.h for all configuration options.
 //
-//#define TOUCH_UI_FTDI_EVE
+//#define LULZBOT_TOUCH_UI
 
 //
 // Third-party or vendor-customized controller interfaces.

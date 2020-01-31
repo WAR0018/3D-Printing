@@ -92,12 +92,12 @@
 #ifndef Y_CS_PIN
   #define Y_CS_PIN         P1_15
 #endif
-// ALL Z AND E1 PINS HAVE BEEN SWAPPED AROUND, WIRE ACCORDINGLY
-#define Z_STEP_PIN         P0_01
-#define Z_DIR_PIN          P0_00
-#define Z_ENABLE_PIN       P0_10
+
+#define Z_STEP_PIN         P0_22
+#define Z_DIR_PIN          P2_11
+#define Z_ENABLE_PIN       P0_21
 #ifndef Z_CS_PIN
-  #define Z_CS_PIN         P1_01
+  #define Z_CS_PIN         P1_10
 #endif
 
 #define E0_STEP_PIN        P2_13
@@ -108,7 +108,7 @@
 #endif
 
 #ifndef E1_CS_PIN
-  #define E1_CS_PIN        P1_10
+  #define E1_CS_PIN        P1_01
 #endif
 
 //

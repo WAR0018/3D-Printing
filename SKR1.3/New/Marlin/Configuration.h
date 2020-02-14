@@ -928,17 +928,35 @@
  *
  * Specify a Probe position as { X, Y, Z }
  */
-#define NOZZLE_TO_PROBE_OFFSET { -48, -10, -3.4 }
+
+#define PETSFANG_LEFT
+
+#if ENABLED(PETSFANG_LEFT)
+  #define NOZZLE_TO_PROBE_OFFSET { -48, -10, -3.4 }
+  #else 
+  #define NOZZLE_TO_PROBE_OFFSET { 0, 0, 0 }
+  #endif
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
 #define MIN_PROBE_EDGE 20
 
+// Allows the user to set 2 different sets of speeds to experiment with
+#define SLOW_PROBE_SPEED
+
 // X and Y axis travel speed (mm/m) between probes
+#if ENABLED(SLOW_PROBE_SPEED)
+  #define XY_PROBE_SPEED 3000 // see how high you can get this
+  #else
 #define XY_PROBE_SPEED 8000
+#endif
 
 // Feedrate (mm/m) for the first approach when double-probing (MULTIPLE_PROBING == 2)
+#if ENABLED(SLOW_PROBE_SPEED)
+  #define Z_PROBE_SPEED_FAST 180
+  #else
 #define Z_PROBE_SPEED_FAST HOMING_FEEDRATE_Z
+#endif
 
 // Feedrate (mm/m) for the "accurate" probe of each point
 #define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 2)
@@ -1059,9 +1077,16 @@
 
 // @section machine
 
+#define CUSTOM_BED_SIZE
+
 // The size of the print bed
-#define X_BED_SIZE 235
+#if ENABLED(CUSTOM_BED_SIZE)
+#define X_BED_SIZE 235 
 #define Y_BED_SIZE 230
+#else
+#define X_BED_SIZE 235
+#define Y_BED_SIZE 235
+#endif
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
 #define X_MIN_POS 0
@@ -1332,7 +1357,7 @@
 
 // Homing speeds (mm/m)
 #define HOMING_FEEDRATE_XY (20*60)
-#define HOMING_FEEDRATE_Z  179
+#define HOMING_FEEDRATE_Z  (18*60)
 
 // Validate that endstops are triggered on homing moves
 #define VALIDATE_HOMING_ENDSTOPS

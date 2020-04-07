@@ -726,7 +726,7 @@
  * Override with M203
  *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 500, 500, 26, 50 }
+#define DEFAULT_MAX_FEEDRATE          { 500, 500, 20, 50 }
 
 #define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
@@ -942,13 +942,13 @@
 #define MIN_PROBE_EDGE 20
 
 // Allows the user to set 2 different sets of speeds to experiment with
-#define SLOW_PROBE_SPEED
+//#define SLOW_PROBE_SPEED
 
 // X and Y axis travel speed (mm/m) between probes
 #if ENABLED(SLOW_PROBE_SPEED)
   #define XY_PROBE_SPEED 3000 // see how high you can get this
   #else
-#define XY_PROBE_SPEED 8000
+#define XY_PROBE_SPEED 10000
 #endif
 
 // Feedrate (mm/m) for the first approach when double-probing (MULTIPLE_PROBING == 2)
@@ -1082,7 +1082,7 @@
 // The size of the print bed
 #if ENABLED(CUSTOM_BED_SIZE)
 #define X_BED_SIZE 235 
-#define Y_BED_SIZE 230
+#define Y_BED_SIZE 209
 #else
 #define X_BED_SIZE 235
 #define Y_BED_SIZE 235
@@ -1090,10 +1090,10 @@
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
 #define X_MIN_POS 0
-#define Y_MIN_POS -12
+#define Y_MIN_POS -13
 #define Z_MIN_POS 0
-#define X_MAX_POS X_BED_SIZE
-#define Y_MAX_POS Y_BED_SIZE
+#define X_MAX_POS 235 
+#define Y_MAX_POS 222 
 #define Z_MAX_POS 250
 
 /**
